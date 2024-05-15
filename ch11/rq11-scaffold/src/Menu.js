@@ -1,13 +1,15 @@
 import MenuItem from "./MenuItem";
 
-function Menu() {
+function Menu({items}) {
   return (
     <nav>
       <ul className="menu">
-        <MenuItem href="/" icon="home">Home</MenuItem>
-        <MenuItem href="/services" icon="services">Services</MenuItem>
-        <MenuItem href="/pricing" icon="pricing">Pricing</MenuItem>
-        <MenuItem href="/blog" icon="blog">Blog</MenuItem>
+        {items.map(
+          item => (
+            <MenuItem href={item.href} icon={item.icon}>
+              {item.title}
+            </MenuItem>
+        ))} 
       </ul>
     </nav>
   );
