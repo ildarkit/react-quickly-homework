@@ -1,4 +1,4 @@
-import Menu from "./Menu";
+import Main from "./Main";
 import MenuContext from "./MenuContext";
 import "./style.css";
 
@@ -7,16 +7,16 @@ function App() {
     {href: "/", icon: "home", title: "Home"},
     {href: "/services", icon: "services", title: "Services"},
     {href: "/pricing", icon: "pricing", title: "Pricing"},
-    {href: "/blog", icon: "blog", title: "Blog"}
+    {href: "/blog", icon: "blog", title: "Blog"},
   ];
+  const data = {
+    login: false,
+    items,
+    profile: {href: "/profile", icon: "profile", title: "Profile"},
+  };
   return (
-    <MenuContext.Provider value={items}>
-      <header>
-        <Menu/>
-      </header>
-      <main>
-        <h1>Welcome to this website</h1>
-      </main>
+    <MenuContext.Provider value={data}> 
+      <Main/>
       <footer>
         <a href="/about">About</a>
         <a href="/contact">Contact</a>

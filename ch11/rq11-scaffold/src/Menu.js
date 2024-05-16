@@ -3,16 +3,17 @@ import MenuItem from "./MenuItem";
 import MenuContext from "./MenuContext";
 
 function Menu() {
-  const items = useContext(MenuContext);
+  const {login, items, profile} = useContext(MenuContext);
+  const links = login ? items.concat(profile) : items;
   return (
     <nav>
       <ul className="menu">
-        {items.map(
-          item => (
-            <MenuItem href={item.href} icon={item.icon}>
-              {item.title}
+        {links.map(
+          ({title, ...props}) => (
+            <MenuItem key={title} {...props}>
+              {title}
             </MenuItem>
-        ))} 
+        ))}
       </ul>
     </nav>
   );
