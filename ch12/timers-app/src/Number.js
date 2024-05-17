@@ -1,8 +1,8 @@
-function Number() {
+function Number({time, timeUnit}) {
   return (
     <>
-      <p className="number">05</p>
-      <p className="unit">minutes</p>
+      <p className="number">{time}</p>
+      <p className="unit">{timeUnit}</p>
     </>
   );
 }

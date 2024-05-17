@@ -1,14 +1,14 @@
 import Number from './Number';
 
-function TimeDisplay() {
+function TimeDisplay({time}) {
   return (
     <ul className="parts">
       <li className="part">
-        <Number/>
+        <Number time={Math.trunc(time / 60)} timeUnit="minutes"/>
       </li>
       <li className="colon">:</li>
       <li className="part">
-        <Number/>
+        <Number time={time % 60} timeUnit="seconds"/>
       </li>
     </ul>
   );
