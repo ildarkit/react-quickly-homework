@@ -3,7 +3,7 @@ import Timer from "./Timer";
 function TimerManager() {
   return (
     <div className="timers">
-      <Timer />
+      <Timer startTime = {300}/>
     </div>
   );
 }
