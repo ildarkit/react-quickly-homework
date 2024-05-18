@@ -13,6 +13,7 @@ function Timer({startTime}) {
       setCounter(c => {
         if (c === 0) {
           setPlay(!isPlaying);
+          setCounter(startTime);
           return c;
         }
         return c - 1;
@@ -23,7 +24,7 @@ function Timer({startTime}) {
   }, [startTime, isPlaying]);
 
   return (
-    <section className="timer">
+    <section className={`timer ${isPlaying ? "timer-ticking": ""}`}>
       <TimeDisplay time={counter}/>
       {!isPlaying ? (
         <Button title="Play" icon="icons/play.svg" onClick = {onClick}/>
