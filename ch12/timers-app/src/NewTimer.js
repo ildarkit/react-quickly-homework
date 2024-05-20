@@ -14,9 +14,9 @@ function NewTimer({handleAdd}) {
   return (
     <form className="timer timer-new" onSubmit={onSubmit}>
       <ul className="parts">
-        <Input label="minutes" value={min} onChange={onChangeMin}/>
+        <Input label="minutes" value={String(min).padStart(2, "0")} onChange={onChangeMin}/>
         <li className="colon">:</li>
-        <Input label="seconds" value={sec} onChange={onChangeSec}/>
+        <Input label="seconds" value={String(sec).padStart(2, "0")} onChange={onChangeSec}/>
       </ul>
       <Button title="Play" icon="play"/>
     </form>
