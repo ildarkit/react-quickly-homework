@@ -18,7 +18,7 @@ function NewTimer({handleAdd}) {
         <li className="colon">:</li>
         <Input label="seconds" value={sec} onChange={onChangeSec}/>
       </ul>
-      <Button title="Play" icon="icon/play.svg"/>
+      <Button title="Play" icon="play"/>
     </form>
   );
 }
