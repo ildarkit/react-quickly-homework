@@ -24,12 +24,14 @@ function Timer({startTime}) {
   }, [startTime, isPlaying]);
 
   return (
-    <section className={`timer ${isPlaying ? "timer-ticking": ""}`}>
+    <section className={
+      `timer ${isPlaying ? "timer-ticking": counter === 0 ? "timer-ringing": ""}`
+    }>
       <TimeDisplay time={counter}/>
       {!isPlaying ? (
-        <Button title="Play" icon="icons/play.svg" onClick = {onClick}/>
+        <Button title="Play" icon="play" onClick = {onClick}/>
       ) : (
-        <Button title="Pause" icon="icons/pause.svg" onClick = {onClick}/>
+        <Button title="Pause" icon="pause" onClick = {onClick}/>
       )}
     </section>
   );

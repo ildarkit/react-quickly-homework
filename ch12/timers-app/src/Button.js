@@ -1,7 +1,7 @@
-function Button({icon, title, onClick}) {
+function Button({icon, title, ...rest}) {
   return (
-    <button onClick={onClick} title={title} className="toggle">
-      <img src={icon} alt={title} />
+    <button title={title} {...rest} className="toggle">
+      <img src={`icons/${icon}.svg`} alt={title} />
     </button>
   );
 }
