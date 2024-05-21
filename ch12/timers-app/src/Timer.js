@@ -1,38 +1,51 @@
-import {useState, useEffect} from 'react';
+import {useReducer, useEffect} from 'react';
 import Button from "./Button";
 import TimeDisplay from "./TimeDisplay";
 
-function Timer({startTime}) {
-  const [counter, setCounter] = useState(startTime);
-  const [isPlaying, setPlay] = useState(false);
-  const onClick = () => setPlay(!isPlaying); 
+function reducer(state, {type}) {
+  switch (type) {
+    case "TICK":
+      return (state.counter === 0) ? {...state, isCounting: false}:
+        {...state, counter: state.counter - 1};
+    case "PLAYPAUSE":
+      return (state.counter === 0) ? state: {...state, isCounting: !state.isCounting};
+    case "RESTART":
+      return {...state, counter: state.startTime, isCounting: false};
+    default:
+      return state;
+  }
+}
+
+function Timer({timerId, startTime, handleDelete}) {
+  const onDelete = () => handleDelete(timerId);
+  const [timerState, dispatch] = useReducer(
+    reducer,
+    {startTime,
+      counter: startTime,
+      isCounting: false,
+    }
+  );
   
   useEffect(() => {
-    if (!isPlaying) return;
-    const tick = () => {
-      setCounter(c => {
-        if (c === 0) {
-          setPlay(!isPlaying);
-          setCounter(startTime);
-          return c;
-        }
-        return c - 1;
-      });
-    };
+    if (!timerState.isCounting) return;
+    const tick = () => dispatch({type: "TICK"});
     const interval = setInterval(tick, 1000);
     return () => clearInterval(interval);
-  }, [startTime, isPlaying]);
+  }, [timerState]);
 
   return (
     <section className={
-      `timer ${isPlaying ? "timer-ticking": counter === 0 ? "timer-ringing": ""}`
+      `timer ${timerState.isCounting ?
+        "timer-ticking": timerState.counter === 0 ? "timer-ringing": ""}`
     }>
-      <TimeDisplay time={counter}/>
-      {!isPlaying ? (
-        <Button title="Play" icon="play" onClick = {onClick}/>
+      <TimeDisplay time={timerState.counter}/>
+      {!timerState.isCounting ? (
+        <Button title="Play" icon="play" onClick={() => dispatch({type: "PLAYPAUSE"})}/>
       ) : (
-        <Button title="Pause" icon="pause" onClick = {onClick}/>
+        <Button title="Pause" icon="pause" onClick={() => dispatch({type: "PLAYPAUSE"})}/>
       )}
+      <Button title="Restart" icon="restart" onClick={() => dispatch({type: "RESTART"})}/>
+      <Button title="Trash" icon="trash" onClick={onDelete}/>
     </section>
   );
 }
