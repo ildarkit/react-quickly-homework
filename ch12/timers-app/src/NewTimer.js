@@ -5,8 +5,12 @@ import Button from "./Button";
 function NewTimer({handleAdd}) {
   const [min, setMinutes] = useState(5);
   const [sec, setSeconds] = useState(0);
-  const onChangeMin = (event) => setMinutes(event.target.valueAsNumber);
-  const onChangeSec = (event) => setSeconds(event.target.valueAsNumber);
+  const onChangeMin = (event) => setMinutes(
+    Number(event.target.value.slice(-2))
+  );
+  const onChangeSec = (event) => setSeconds(
+    Number(event.target.value.slice(-2))
+  );
   const onSubmit = (event) => {
     event.preventDefault();
     handleAdd(min * 60 + sec);
