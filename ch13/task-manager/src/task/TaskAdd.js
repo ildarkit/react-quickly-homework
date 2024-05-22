@@ -1,10 +1,16 @@
 import Button from "../Button";
 
-function TaskAdd() {
+function TaskAdd({addTask}) {
+  const onSubmit = evt => {
+    evt.preventDefault();
+    addTask(evt.target.title.value);
+    evt.target.reset();
+  };
+
   return (
     <li className="card">
       <header className="card-header card-header-new">
-        <form className="card-title-form">
+        <form className="card-title-form" onSubmit={onSubmit}>
           <input
             className="card-title card-title-input"
             placeholder="Add new task"
