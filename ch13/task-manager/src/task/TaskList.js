@@ -8,26 +8,22 @@ function getTasks() {
 }
 
 function TaskList() {
-  const [tasks, setTask] = useState(getTasks);
+  const [tasks, setTasks] = useState(getTasks);
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks))
   }, [tasks]);
   const addTask = title => {
-    setTask(tasks => tasks.concat(
+    setTasks(tasks => tasks.concat(
       {id: Math.random() * 1_000_000, title}
     ));
   };
   const editTask = (id, title) => {
-    setTask(tasks => {
-      tasks.map(task => {
-        task.id === id ? {...task, title}: task
-      });
-    });
+    setTasks(tasks => tasks.map(task => (
+      task.id === id ? {...task, title}: task
+    )));
   };
   const deleteTask = id => {
-    setTask(tasks => {
-      tasks.filter(task => task.id !== id);
-    });
+    setTasks(tasks => tasks.filter(task => task.id !== id));
   };
 
   return (
@@ -35,6 +31,7 @@ function TaskList() {
       {tasks.map(task => (
         <Task
           key={task.id} 
+          taskID={task.id}
           title={task.title} 
           editTask={editTask} 
           deleteTask={deleteTask}

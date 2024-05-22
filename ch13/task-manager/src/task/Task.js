@@ -15,7 +15,7 @@ function Task({title, taskID, editTask, deleteTask}) {
         <TaskHeaderEdit 
           title={title} 
           taskID={taskID} 
-          handleEdit={handleEdit}
+          editTask={handleEdit}
         />
       ) : (
         <TaskHeader title={title}/>
@@ -39,3 +39,5 @@ function Task({title, taskID, editTask, deleteTask}) {
     </li> 
   );
 }
+
+export default Task;
