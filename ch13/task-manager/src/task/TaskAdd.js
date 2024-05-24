@@ -1,9 +1,12 @@
+import {useContext} from "react";
 import Button from "../Button";
+import TaskContext from "./TaskContext";
 
-function TaskAdd({addTask}) {
+function TaskAdd() {
+  const dispatch = useContext(TaskContext);
   const onSubmit = evt => {
     evt.preventDefault();
-    addTask(evt.target.title.value);
+    dispatch({type: "addTask", title: evt.target.title.value})
     evt.target.reset();
   };
 
