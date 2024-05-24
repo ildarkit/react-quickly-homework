@@ -1,24 +1,29 @@
-import {useState} from "react";
+import {useState, useContext} from "react";
 import Button from "../Button";
 import TaskHeader from "./TaskHeader";
 import TaskHeaderEdit from "./TaskHeaderEdit";
+import TaskStep from "./TaskStep";
+import TaskStepAdd from "./TaskStepAdd";
+import TaskContext from "./TaskContext";
 
-function Task({title, taskID, editTask, deleteTask}) {
+function Task({task}) {
+  const dispatch = useContext(TaskContext);
   const [isEdit, setEdit] = useState(false);
-  const handleEdit = (id, value) => {
+  const editTask = (title) => {
     setEdit(false);
-    editTask(id, value);
+    dispatch({type: "editTask", id: task.id, title});
   };
+  const deleteTask = () => dispatch({type: "deleteTask", id: task.id});
+  
   return (
     <li className="card">
       {isEdit ? (
         <TaskHeaderEdit 
-          title={title} 
-          taskID={taskID} 
-          editTask={handleEdit}
+          title={task.title} 
+          editTask={editTask}
         />
       ) : (
-        <TaskHeader title={title}/>
+        <TaskHeader title={task.title}/>
       )}
       <ul className="card-controls">
         <li>
@@ -32,10 +37,20 @@ function Task({title, taskID, editTask, deleteTask}) {
           <Button 
             className="card-control" 
             alt="Delete" 
-            onClick={() => deleteTask(taskID)}
+            onClick={deleteTask}
           />
         </li>
       </ul>
+      <ol className="lane">
+        {task.steps && task.steps.map(step => (
+          <TaskStep
+            key={step.id}
+            taskID={task.id}
+            step={step}
+          />
+        ))}
+        <TaskStepAdd task={task}/>
+      </ol>
     </li> 
   );
 }
