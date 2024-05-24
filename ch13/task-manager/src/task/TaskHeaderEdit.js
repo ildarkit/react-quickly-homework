@@ -1,9 +1,9 @@
 import Button from "../Button";
 
-function TaskHeaderEdit({title, taskID, editTask}) {
+function TaskHeaderEdit({title, editTask}) {
   const onSubmit = evt => {
     evt.preventDefault();
-    editTask(taskID, evt.target.title.value);
+    editTask(evt.target.title.value);
   };
   return (
     <header className="card-header">
