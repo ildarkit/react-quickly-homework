@@ -8,19 +8,24 @@ function getTasks() {
   return JSON.parse(localStorage.getItem("tasks")) || initialState;
 }
 
+function calcProgress(task) {
+  const progress = (task.steps.filter(step => step.isDone).length / task.steps.length) * 100;
+  return progress.toFixed(1);
+}
+
 function reducer(tasks, {type, ...rest}) {
   switch (type) {
     case "addTask":
-      return tasks.concat({id: Math.random() * 1_000_000, steps: [], ...rest});
+      return tasks.concat({id: Math.random() * 1_000_000, steps: [], progress: 0, ...rest});
     case "editTask":
       const {id, title} = rest;
       return tasks.map(task => task.id === id ? {...task, title}: task);
     case "deleteTask":
       return tasks.filter(task => task.id !== rest.id);
     case "addStep": 
-      return tasks.map(task => task.id === rest.taskID ?
+      tasks = tasks.map(task => task.id === rest.taskID ?
         {
-          ...task, 
+          ...task,
           steps: task.steps.concat(
             {
               id: Math.trunc(Math.random() * 1_000_000),
@@ -30,21 +35,28 @@ function reducer(tasks, {type, ...rest}) {
           )
         } : task
       );
+      const addStepTask = tasks.find(t => t.id === rest.taskID);
+      addStepTask.progress = calcProgress(addStepTask);
+      return tasks;
     case "editStep":
       const {stepID, taskID, ...props} = rest;
       const updateStep = step => {
         return step.id === stepID ?
           {...step, ...props} : step
       };
-      return tasks.map(task => {
-        return task.id === taskID ?
-          {...task,
-            steps: task.steps.map(step => updateStep(step))
+      tasks = tasks.map(task => task.id === taskID ?
+          {
+            ...task,
+            steps: task.steps.map(step => updateStep(step)),
           } : task
-      });
+      );
+      let editStepTask = tasks.find(t => t.id === rest.taskID);
+      editStepTask.progress = calcProgress(editStepTask);
+      return tasks;
     case "deleteStep":
       const deleteStep = (task, id) => {
         task.steps = task.steps.filter(step => step.id !== id);
+        task.progress = calcProgress(task);
         return task;
       };
       return tasks.map(task => {
@@ -66,10 +78,13 @@ function TaskList() {
     <ol className="lane">
       <TaskContext.Provider value={dispatch}>
         {tasks.map(task => (
-          <Task
-            key={task.id}
-            task={task} 
-          />
+          <>
+            <Task
+              key={task.id}
+              task={task} 
+            />
+            <progress max="100" value={task.progress}/>
+          </>
         ))} 
         <TaskAdd/>
       </TaskContext.Provider>
