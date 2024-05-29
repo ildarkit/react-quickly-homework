@@ -17,20 +17,19 @@ function reducer(tasks, {type, ...rest}) {
       return tasks.map(task => task.id === id ? {...task, title}: task);
     case "deleteTask":
       return tasks.filter(task => task.id !== rest.id);
-    case "addStep":
-      const addStep = (task, title) => {
-        task.steps = task.steps.concat(
-          {id: Math.random() * 1_000_000,
-            title, 
-            isDone: false
-          }
-        );
-        return task;
-      };
-      return tasks.map(task => {
-        return task.id === rest.taskID ?
-          addStep(task, rest.title) : task;
-      });
+    case "addStep": 
+      return tasks.map(task => task.id === rest.taskID ?
+        {
+          ...task, 
+          steps: task.steps.concat(
+            {
+              id: Math.trunc(Math.random() * 1_000_000),
+              title: rest.title,
+              isDone: false
+            }
+          )
+        } : task
+      );
     case "editStep":
       const {stepID, taskID, ...props} = rest;
       const updateStep = step => {
