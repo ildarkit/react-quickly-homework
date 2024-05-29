@@ -1,6 +1,6 @@
 import Button from "../Button";
 
-function TaskHeaderEdit({title, editTask}) {
+function TaskHeaderEdit({title, editTask, children}) {
   const onSubmit = evt => {
     evt.preventDefault();
     editTask(evt.target.title.value);
@@ -15,6 +15,7 @@ function TaskHeaderEdit({title, editTask}) {
         />
         <Button className="icon-button" icon="check" alt="Edit step"/>
       </form>
+      {children}
     </header>
   );
 }

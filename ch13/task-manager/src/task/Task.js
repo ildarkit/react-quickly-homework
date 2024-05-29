@@ -18,12 +18,13 @@ function Task({task}) {
   return (
     <li className="card">
       {isEdit ? (
-        <TaskHeaderEdit 
-          title={task.title} 
-          editTask={editTask}
-        />
+        <TaskHeaderEdit title={task.title} editTask={editTask}>
+          <p className="card-percentage">{`${task.progress}%`}</p>
+        </TaskHeaderEdit>
       ) : (
-        <TaskHeader title={task.title}/>
+        <TaskHeader title={task.title}>
+          <p className="card-percentage">{`${task.progress}%`}</p>
+        </TaskHeader>
       )}
       <ul className="card-controls">
         <li>
