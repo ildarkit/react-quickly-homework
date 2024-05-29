@@ -52,6 +52,7 @@ function Task({task}) {
         ))}
         <TaskStepAdd task={task}/>
       </ol>
+      <progress className="progress-bar" max="100" value={task.progress}/>
     </li> 
   );
 }
