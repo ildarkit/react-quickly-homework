@@ -1,8 +1,10 @@
-import {useContext} from "react";
+import {useState, useContext} from "react";
 import TaskContext from "./TaskContext";
+import EditStep from "./EditStep";
 import Button from "../Button";
 
 function TaskStep({taskID, step}) {
+  const [isEdit, setEdit] = useState(false);
   const dispatch = useContext(TaskContext);
   const deleteStep = () => dispatch({
     type: "deleteStep", 
@@ -18,16 +20,35 @@ function TaskStep({taskID, step}) {
 
   return (
     <li className="step">
-      <label className="step-label">
-        <input type="checkbox" defaultChecked={step.isDone} onChange={onChange}/>
-        {step.isDone ? <s>{step.title}</s> : step.title}
-      </label>
-      <Button 
-        className="icon-button step-button" 
-        icon="trash" 
-        alt="Delete step" 
-        onClick={deleteStep}
-      />
+      {isEdit ? (
+        <EditStep 
+          taskID={taskID}
+          stepID={step.id}
+          title={step.title}
+          handleStepState={() => setEdit(false)}
+        />
+      ) : (
+      <>
+        <label className="step-label">
+          <input type="checkbox" defaultChecked={step.isDone} onChange={onChange}/>
+          {step.isDone ? <s>{step.title}</s> : step.title}
+        </label>
+        {!step.isDone && (
+          <Button 
+            className="icon-button step-button" 
+            icon="pencil" 
+            alt="Edit step" 
+            onClick={() => setEdit(true)}
+          />
+        )}
+        <Button 
+          className="icon-button step-button" 
+          icon="trash" 
+          alt="Delete step" 
+          onClick={deleteStep}
+        />
+      </>
+      )}
     </li>
   );
 }

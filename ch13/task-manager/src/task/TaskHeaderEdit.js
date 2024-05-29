@@ -13,7 +13,7 @@ function TaskHeaderEdit({title, editTask, children}) {
           defaultValue={title}
           name="title"
         />
-        <Button className="icon-button" icon="check" alt="Edit step"/>
+        <Button className="icon-button" icon="check" alt="Edit task"/>
       </form>
       {children}
     </header>
