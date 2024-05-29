@@ -14,6 +14,20 @@ function calcProgress(task) {
   return progress.toFixed(1);
 }
 
+function swapSteps(task, stepID, priority) {
+  const stepPos = task.steps.findIndex(step => step.id === stepID);
+  const newPos = priority === "up" ? stepPos - 1 : stepPos + 1;
+  if (newPos < 0 || newPos >= task.steps.length)
+    return task.steps;
+  return task.steps.map((step, i, steps) => {
+    if (i === stepPos) 
+      return steps[newPos];
+    else if (i === newPos)
+      return steps[stepPos];
+    return step;
+  });
+}
+
 function reducer(tasks, {type, ...rest}) {
   switch (type) {
     case "addTask":
@@ -64,6 +78,13 @@ function reducer(tasks, {type, ...rest}) {
         return task.id === rest.taskID ? 
           deleteStep(task, rest.stepID) : task
       });
+    case "priorityStep": 
+      return tasks.map(task =>
+        task.id === rest.taskID ?
+          {...task,
+            steps: swapSteps(task, rest.stepID, rest.priority)
+          } : task
+      );
     default:
       return tasks;
   }
@@ -79,13 +100,10 @@ function TaskList() {
     <ol className="lane">
       <TaskContext.Provider value={dispatch}>
         {tasks.map(task => (
-          <>
-            <Task
-              key={task.id}
-              task={task} 
-            />
-            <progress max="100" value={task.progress}/>
-          </>
+          <Task
+            key={task.id}
+            task={task} 
+          /> 
         ))} 
         <TaskAdd/>
       </TaskContext.Provider>

@@ -17,6 +17,12 @@ function TaskStep({taskID, step}) {
     taskID,
     isDone: evt.target.checked
   });
+  const priorityStep = (priority) => dispatch({
+    type: "priorityStep",
+    stepID: step.id,
+    taskID,
+    priority
+  });
 
   return (
     <li className="step">
@@ -46,6 +52,18 @@ function TaskStep({taskID, step}) {
           icon="trash" 
           alt="Delete step" 
           onClick={deleteStep}
+        />
+        <Button 
+          className="icon-button step-button" 
+          icon="up" 
+          alt="Up step" 
+          onClick={() => priorityStep("up")}
+        />
+        <Button 
+          className="icon-button step-button" 
+          icon="down" 
+          alt="Down step" 
+          onClick={() => priorityStep("down")}
         />
       </>
       )}
