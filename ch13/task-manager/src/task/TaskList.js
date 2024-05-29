@@ -9,7 +9,8 @@ function getTasks() {
 }
 
 function calcProgress(task) {
-  const progress = (task.steps.filter(step => step.isDone).length / task.steps.length) * 100;
+  const progress = task.steps.length > 0 ? 
+    (task.steps.filter(step => step.isDone).length / task.steps.length) * 100 : 0;
   return progress.toFixed(1);
 }
 
