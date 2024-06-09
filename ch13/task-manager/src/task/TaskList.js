@@ -3,88 +3,36 @@ import Task from "./Task";
 import TaskAdd from "./TaskAdd";
 import TaskContext from "./TaskContext";
 import initialState from "./fixture";
+import {
+  addTask,
+  editTask,
+  deleteTask,
+  addStep,
+  editStep,
+  deleteStep,
+  priorityStep
+} from "./taskCore";
 
 function getTasks() {
   return JSON.parse(localStorage.getItem("tasks")) || initialState;
 }
 
-function calcProgress(task) {
-  const progress = task.steps.length > 0 ? 
-    (task.steps.filter(step => step.isDone).length / task.steps.length) * 100 : 0;
-  return progress.toFixed(1);
-}
-
-function swapSteps(task, stepID, priority) {
-  const stepPos = task.steps.findIndex(step => step.id === stepID);
-  const newPos = priority === "up" ? stepPos - 1 : stepPos + 1;
-  if (newPos < 0 || newPos >= task.steps.length)
-    return task.steps;
-  return task.steps.map((step, i, steps) => {
-    if (i === stepPos) 
-      return steps[newPos];
-    else if (i === newPos)
-      return steps[stepPos];
-    return step;
-  });
-}
-
 function reducer(tasks, {type, ...rest}) {
   switch (type) {
     case "addTask":
-      return tasks.concat({id: Math.random() * 1_000_000, steps: [], progress: 0, ...rest});
+      return addTask(tasks, ...rest);
     case "editTask":
-      const {id, title} = rest;
-      return tasks.map(task => task.id === id ? {...task, title}: task);
+      return editTask(tasks, rest); 
     case "deleteTask":
-      return tasks.filter(task => task.id !== rest.id);
+      return deleteTask(tasks, rest);
     case "addStep": 
-      tasks = tasks.map(task => task.id === rest.taskID ?
-        {
-          ...task,
-          steps: task.steps.concat(
-            {
-              id: Math.trunc(Math.random() * 1_000_000),
-              title: rest.title,
-              isDone: false
-            }
-          )
-        } : task
-      );
-      const addStepTask = tasks.find(t => t.id === rest.taskID);
-      addStepTask.progress = calcProgress(addStepTask);
-      return tasks;
+      return addStep(tasks, rest); 
     case "editStep":
-      const {stepID, taskID, ...props} = rest;
-      const updateStep = step => {
-        return step.id === stepID ?
-          {...step, ...props} : step
-      };
-      tasks = tasks.map(task => task.id === taskID ?
-          {
-            ...task,
-            steps: task.steps.map(step => updateStep(step)),
-          } : task
-      );
-      let editStepTask = tasks.find(t => t.id === rest.taskID);
-      editStepTask.progress = calcProgress(editStepTask);
-      return tasks;
+      return editStep(tasks, rest); 
     case "deleteStep":
-      const deleteStep = (task, id) => {
-        task.steps = task.steps.filter(step => step.id !== id);
-        task.progress = calcProgress(task);
-        return task;
-      };
-      return tasks.map(task => {
-        return task.id === rest.taskID ? 
-          deleteStep(task, rest.stepID) : task
-      });
+      return deleteStep(tasks, rest); 
     case "priorityStep": 
-      return tasks.map(task =>
-        task.id === rest.taskID ?
-          {...task,
-            steps: swapSteps(task, rest.stepID, rest.priority)
-          } : task
-      );
+      return priorityStep(tasks, rest); 
     default:
       return tasks;
   }
