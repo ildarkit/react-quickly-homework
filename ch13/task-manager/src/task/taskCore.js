@@ -4,18 +4,18 @@ function calcProgress(task) {
   return progress.toFixed(1);
 }
 
-function swapSteps(task, stepID, priority) {
-  const stepPos = task.steps.findIndex(step => step.id === stepID);
-  const newPos = priority === "up" ? stepPos - 1 : stepPos + 1;
-  if (newPos < 0 || newPos >= task.steps.length)
+function moveSteps(task, fromPos, toPos) {
+  if (toPos < 0 || toPos >= task.steps.length)
     return task.steps;
-  return task.steps.map((step, i, steps) => {
-    if (i === stepPos) 
-      return steps[newPos];
-    else if (i === newPos)
-      return steps[stepPos];
-    return step;
-  });
+  const movedItem = task.steps[fromPos];
+  const remainingItems = task
+    .steps
+    .filter((item, i) => i !== fromPos);
+  return [
+    ...remainingItems.slice(0, toPos),
+    movedItem,
+    ...remainingItems.slice(toPos)
+  ]; 
 }
 
 function addTask(tasks, {title}) {
@@ -63,10 +63,10 @@ function editStep(tasks, {taskID, stepID, ...props}) {
   return tasks;
 }
 
-function priorityStep(tasks, {taskID, stepID, priority}) {
+function priorityStep(tasks, {taskID, fromPos, toPos}) {
   return tasks.map(task => {
     return task.id === taskID ?
-    { ...task, steps: swapSteps(task, stepID, priority) } : task
+    { ...task, steps: moveSteps(task, fromPos, toPos) } : task
   });
 }
 

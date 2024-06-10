@@ -3,7 +3,7 @@ import TaskContext from "./TaskContext";
 import EditStepForm from "./EditStepForm";
 import Button from "../Button";
 
-function TaskStepControl({taskID, step}) {
+function TaskStepControl({taskID, step, position}) {
   const [isEdit, setEdit] = useState(false);
   const dispatch = useContext(TaskContext);
   const deleteStep = () => dispatch({
@@ -13,15 +13,15 @@ function TaskStepControl({taskID, step}) {
   });
   const editStep = (evt) => dispatch({ 
     type: "editStep",
-    stepID: step.id,
     taskID,
+    stepID: step.id,
     isDone: evt.target.checked
   });
   const priorityStep = (priority) => dispatch({
     type: "priorityStep",
-    stepID: step.id,
     taskID,
-    priority
+    fromPos: position,
+    toPos: priority === "up" ? position - 1 : position + 1,
   });
 
   return (

@@ -5,22 +5,24 @@ import TaskStepControl from "./TaskStepControl";
 function TaskStep({taskID, step, position}) {
   const dispatch = useContext(TaskContext);
   const onDragStart = (evt) => {
-    const initialPos = Number(evt.currentTarget.dataset.position);
-    evt.dataTransfer.setData("initialPos", initialPos);
+    const initialPos = evt.currentTarget.dataset.position;
+    evt.dataTransfer.setData("application/task", initialPos);
   };
   const onDragOver = (evt) => {
     evt.preventDefault();
-    const fromPos = evt.dataTransfer.getData("initialPos");
+    evt.dataTransfer.dropEffect = "move"; 
+  };
+  const onDrop = (evt) => {
+    evt.preventDefault();
+    const fromPos = Number(evt.dataTransfer.getData("application/task"));
     const toPos = Number(evt.currentTarget.dataset.position);
     dispatch({
-      type: "priorityStepDnD",
+      type: "priorityStep",
       taskID,
-      stepID: step.id,
       fromPos,
       toPos
     });
   };
-  const onDrop = () => {};
 
   return (
     <li
@@ -34,6 +36,7 @@ function TaskStep({taskID, step, position}) {
       <TaskStepControl
         taskID={taskID}
         step={step}
+        position={position}
       /> 
     </li>
   );
