@@ -189,6 +189,10 @@ main {
   opacity: 0;
 }
 
+.step:hover .step-label {
+  cursor: grab;
+}
+
 .step:hover .step-button {
   opacity: 0.5;
 }
