@@ -6,7 +6,8 @@ function TaskStep({taskID, step, position}) {
   const dispatch = useContext(TaskContext);
   const onDragStart = (evt) => {
     const initialPos = evt.currentTarget.dataset.position;
-    evt.dataTransfer.setData("application/task", initialPos);
+    evt.dataTransfer.setData("app/initPos", initialPos);
+    evt.dataTransfer.setData("app/task", taskID);
   };
   const onDragOver = (evt) => {
     evt.preventDefault();
@@ -14,7 +15,9 @@ function TaskStep({taskID, step, position}) {
   };
   const onDrop = (evt) => {
     evt.preventDefault();
-    const fromPos = Number(evt.dataTransfer.getData("application/task"));
+    const fromTaskID = Number(evt.dataTransfer.getData("app/task"));
+    if (taskID !== fromTaskID) return;
+    const fromPos = Number(evt.dataTransfer.getData("app/initPos"));
     const toPos = Number(evt.currentTarget.dataset.position);
     dispatch({
       type: "priorityStep",
