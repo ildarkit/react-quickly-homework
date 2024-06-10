@@ -13,7 +13,7 @@ function Task({task}) {
     setEdit(false);
     dispatch({type: "editTask", id: task.id, title});
   };
-  const deleteTask = () => dispatch({type: "deleteTask", id: task.id});
+  const deleteTask = () => dispatch({type: "deleteTask", id: task.id}); 
   
   return (
     <li className="card">
@@ -43,11 +43,12 @@ function Task({task}) {
         </li>
       </ul>
       <ol className="lane">
-        {task.steps && task.steps.map(step => (
-          <TaskStep
+        {task.steps && task.steps.map((step, i) => (
+          <TaskStep 
             key={step.id}
             taskID={task.id}
             step={step}
+            position={i}
           />
         ))}
         <TaskStepAdd task={task}/>

@@ -2,7 +2,7 @@ import {useContext} from "react";
 import Button from "../Button";
 import TaskContext from "./TaskContext";
 
-function EditStep({taskID, stepID, title, handleStepState}) {
+function EditStepForm({taskID, stepID, title, handleStepState}) {
   const dispatch = useContext(TaskContext);
   const onSubmit = (evt) => {
     evt.preventDefault();
@@ -31,4 +31,4 @@ function EditStep({taskID, stepID, title, handleStepState}) {
   );
 }
 
-export default EditStep;
+export default EditStepForm;
