@@ -20,7 +20,7 @@ function getTasks() {
 function reducer(tasks, {type, ...rest}) {
   switch (type) {
     case "addTask":
-      return addTask(tasks, ...rest);
+      return addTask(tasks, rest);
     case "editTask":
       return editTask(tasks, rest); 
     case "deleteTask":

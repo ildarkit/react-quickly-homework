@@ -18,8 +18,13 @@ function swapSteps(task, stepID, priority) {
   });
 }
 
-function addTask(tasks, ...rest) {
-  return tasks.concat({id: Math.random() * 1_000_000, steps: [], progress: 0, ...rest});
+function addTask(tasks, {title}) {
+  return tasks.concat({
+    id: Math.random() * 1_000_000,
+    title,
+    steps: [],
+    progress: 0
+  });
 }
 
 function editTask(tasks, {id, title}) {
