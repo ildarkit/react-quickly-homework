@@ -20,7 +20,7 @@ function moveSteps(task, fromPos, toPos) {
 
 function addTask(tasks, {title}) {
   return tasks.concat({
-    id: Math.random() * 1_000_000,
+    id: Math.trunc(Math.random() * 1_000_000),
     title,
     steps: [],
     progress: 0
